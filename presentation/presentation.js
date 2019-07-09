@@ -24,20 +24,21 @@ rl.question('Que souhaitez-vous faire ? : ', function(saisie) {
             // la variable `saisie` contient la saisie effectuée
             console.log(`Vous avez saisi : ${saisie2}`);
 
-            console.log(`Recherche en cours du nom : ${saisie2}`);
+            console.log(`>> Recherche en cours du nom : ${saisie2} <<`);
 
             service.rechercherColleguesParNom(`${saisie2}`, function(colleguesTrouves){
-                service.rechercherColleguesParMatricule(colleguesTrouves, function(collegue){
-                    
-                    console.log(collegue);
+                for (i = 0; i <colleguesTrouves.length; i++){
+                    service.rechercherColleguesParMatricule(colleguesTrouves, function(collegue){
+                        console.log(`${collegue.nom}  ${collegue.prenom} ${collegue.dateDeNaissance}`)
+                    });
+                }
 
                 });
             });
                 
                 start();
-            });
-
     }
+
     else if (saisie === '99') {
         console.log('Au revoir');
         rl.close();
