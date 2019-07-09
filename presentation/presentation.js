@@ -27,11 +27,17 @@ rl.question('Que souhaitez-vous faire ? : ', function(saisie) {
             console.log(`Recherche en cours du nom : ${saisie2}`);
 
             service.rechercherColleguesParNom(`${saisie2}`, function(colleguesTrouves){
-                console.log(colleguesTrouves);
+                service.rechercherColleguesParMatricule(colleguesTrouves, function(collegue){
+                    
+                    console.log(collegue);
+
+                });
+            });
+                
                 start();
             });
 
-    })}
+    }
     else if (saisie === '99') {
         console.log('Au revoir');
         rl.close();
@@ -41,6 +47,8 @@ rl.question('Que souhaitez-vous faire ? : ', function(saisie) {
 });
 
 }
+
+
 
 exports.start = start;
 
