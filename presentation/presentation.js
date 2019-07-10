@@ -39,14 +39,9 @@ function start() {
                             console.log(`${collegue.nom}  ${collegue.prenom} ${collegue.dateDeNaissance}`)
                             start();
                         });
-
                     }
-
                 });
-
             });
-
-
         }
         if (saisie === '2') {
             var collegue = {};
@@ -70,22 +65,46 @@ function start() {
                 });
             });
         }
-        
+
 
         if (saisie === '3') {
+            rl.question('Veuillez saisir le matricule du collègue dont vous souhaitez modifier l\'email :', function (matriculeSaisi) {
+                service.rechercherColleguesParMatricule(matriculeSaisi, function (collegue) {
+                    rl.question('Veuillez saisir un nouvel email : ', function (emailSaisi) {
+                        collegue.email = emailSaisi;
+                    service.modifierEmail(matriculeSaisi, collegue, function(collegue){
+                        console.log(collegue);
+                        start();
+                    });
+                   
+                });
 
-            }
-            if (saisie === '4') {
-
-            }
-            else if (saisie === '99') {
-                console.log('Au revoir');
-                rl.close();
-            }
-
-
-            // attention, une fois l'interface fermée, la saisie n'est plus possible
+            });
         });
+    }
+        if (saisie === '4') {
+            rl.question('Veuillez saisir le matricule du collègue dont vous souhaitez modifier l\'url de sa photo :', function (matriculeSaisi) {
+                service.rechercherColleguesParMatricule(matriculeSaisi, function (collegue) {
+                    rl.question('Veuillez saisir un nouvel adresse url pour la photo : ', function (photoUrlSaisi) {
+                        collegue.photoUrl = photoUrlSaisi;
+                    service.modifierPhoto(matriculeSaisi, collegue, function(collegue){
+                        console.log(collegue);
+                        start();
+                    });
+                   
+                });
+
+            });
+        });
+        }
+        else if (saisie === '99') {
+            console.log('Au revoir');
+            rl.close();
+        }
+
+
+        // attention, une fois l'interface fermée, la saisie n'est plus possible
+    });
 
 }
 

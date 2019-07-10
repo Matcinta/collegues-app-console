@@ -28,6 +28,22 @@ function creerCollegue(collegue, callback){
 });
 }
 
+function modifierEmail(matricule, collegue, callback){
+    request(`https://munier-collegues-api.herokuapp.com/collegue/${matricule}`, { json: true, method: "PATCH", body: collegue}, function (err, res, body) {
+        var collegue = body;
+        callback(collegue);
+});
+}
+
+function modifierPhoto(matricule, collegue, callback){
+    request(`https://munier-collegues-api.herokuapp.com/collegue/${matricule}`, { json: true, method: "PATCH", body: collegue}, function (err, res, body) {
+        var collegue = body;
+        callback(collegue);
+});
+}
+
 exports.rechercherColleguesParNom = rechercherColleguesParNom;
 exports.rechercherColleguesParMatricule = rechercherColleguesParMatricule;
 exports.creerCollegue = creerCollegue;
+exports.modifierEmail = modifierEmail;
+exports.modifierPhoto = modifierPhoto;
