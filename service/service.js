@@ -20,5 +20,14 @@ function rechercherColleguesParMatricule(matricule, callback) {
 
 }
 
+function creerCollegue(collegue, callback){
+    request(`https://munier-collegues-api.herokuapp.com/collegue`, { json: true, method: "POST", body: collegue}, function (err, res, body) {
+    var collegue = body;
+    callback(collegue);
+
+});
+}
+
 exports.rechercherColleguesParNom = rechercherColleguesParNom;
 exports.rechercherColleguesParMatricule = rechercherColleguesParMatricule;
+exports.creerCollegue = creerCollegue;

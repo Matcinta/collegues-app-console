@@ -9,43 +9,83 @@ var rl = readline.createInterface({
     output: process.stdout
 });
 
-function start(){
+function start() {
     var menu1 = '1. Rechercher un collègue par nom';
-    var menu2 = '99. Sortir';
-   console.log(menu1 + '\n' + menu2);
+    var menu2 = '2. Créer un collègue';
+    var menu3 = '3. Modifier l\'email';
+    var menu4 = '4. Modifier la photo';
+    var menu99 = '99. Sortir';
+    console.log('\n' + menu1
+        + '\n' + menu2
+        + '\n' + menu3
+        + '\n' + menu4
+        + '\n' + menu99);
 
-// récupération de la saisie utilisateur
-rl.question('Que souhaitez-vous faire ? : ', function(saisie) {
-    // TODO: ajouter la condition où l'utilisateur tape autre chose que 1 et 99
+    // récupération de la saisie utilisateur
+    rl.question('Que souhaitez-vous faire ? : ', function (saisie) {
+        // TODO: ajouter la condition où l'utilisateur tape autre chose que 1 et 99
 
-    if (saisie === '1') {
-        rl.question('Veuillez saisir le nom du collègue que vous souhaitez chercher : ', function(saisie2) {
-    
-            // la variable `saisie` contient la saisie effectuée
-            console.log(`Vous avez saisi : ${saisie2}`);
+        if (saisie === '1') {
+            rl.question('Veuillez saisir le nom du collègue que vous souhaitez chercher : ', function (saisie2) {
 
-            console.log(`>> Recherche en cours du nom : ${saisie2} <<`);
+                // la variable `saisie` contient la saisie effectuée
+                console.log(`Vous avez saisi : ${saisie2}`);
 
-            service.rechercherColleguesParNom(`${saisie2}`, function(colleguesTrouves){
-                for (i = 0; i <colleguesTrouves.length; i++){
-                    service.rechercherColleguesParMatricule(colleguesTrouves, function(collegue){
-                        console.log(`${collegue.nom}  ${collegue.prenom} ${collegue.dateDeNaissance}`)
-                    });
-                }
+                console.log(`>> Recherche en cours du nom : ${saisie2} <<`);
+
+                service.rechercherColleguesParNom(`${saisie2}`, function (colleguesTrouves) {
+                    for (i = 0; i < colleguesTrouves.length; i++) {
+                        service.rechercherColleguesParMatricule(colleguesTrouves, function (collegue) {
+                            console.log(`${collegue.nom}  ${collegue.prenom} ${collegue.dateDeNaissance}`)
+                            start();
+                        });
+
+                    }
 
                 });
+
             });
-                
-                start();
-    }
 
-    else if (saisie === '99') {
-        console.log('Au revoir');
-        rl.close();
-    }
 
-   // attention, une fois l'interface fermée, la saisie n'est plus possible
-});
+        }
+        if (saisie === '2') {
+            var collegue = {};
+            rl.question('Veuillez saisir le nom du collègue que vous souhaitez ajouter : ', function (nomSaisi) {
+                collegue.nom = nomSaisi;
+                rl.question('Veuillez saisir le prénom du collègue que vous souhaitez ajouter : ', function (prenomSaisi) {
+                    collegue.prenom = prenomSaisi;
+                    rl.question('Veuillez saisir l\'email du collègue que vous souhaitez ajouter : ', function (emailSaisi) {
+                        collegue.email = emailSaisi;
+                        rl.question('Veuillez saisir la date de naissance du collègue que vous souhaitez ajouter : ', function (dateDeNaissanceSaisie) {
+                            collegue.dateDeNaissance = dateDeNaissanceSaisie;
+                            rl.question('Veuillez saisir l\'url de la photo du collègue que vous souhaitez ajouter : ', function (urlPhotoSaisie) {
+                                collegue.photoUrl = urlPhotoSaisie;
+                                service.creerCollegue(collegue, function (collegue) {
+                                    console.log(collegue);
+                                    start();
+                                })
+                            })
+                        })
+                    })
+                });
+            });
+        }
+        
+
+        if (saisie === '3') {
+
+            }
+            if (saisie === '4') {
+
+            }
+            else if (saisie === '99') {
+                console.log('Au revoir');
+                rl.close();
+            }
+
+
+            // attention, une fois l'interface fermée, la saisie n'est plus possible
+        });
 
 }
 
