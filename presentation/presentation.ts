@@ -1,6 +1,7 @@
 var lg = console.log;
 
 import * as service from '../service/service';
+import {Collegue} from '../domains';
 
 // récupération du module `readline`
 import readline from 'readline';
@@ -30,7 +31,7 @@ function start() {
                 lg(`>> Recherche en cours du nom : ${saisie2} <<`);
                 service.rechercherColleguesParNom(`${saisie2}`)
                     .then((colleguesTrouves: any) => {
-                        colleguesTrouves.forEach((collegue: any) => {
+                        colleguesTrouves.forEach((collegue: Collegue) => {
                             lg(`${collegue.nom}  ${collegue.prenom} ${collegue.dateDeNaissance}`);
                             start();
                         })
@@ -41,17 +42,12 @@ function start() {
         }
 
         if (saisie === '2') {
-            let collegue: any = {};
             rl.question('Veuillez saisir le nom du collègue que vous souhaitez ajouter : ', (nomSaisi: string) => {
-                collegue.nom = nomSaisi;
                 rl.question('Veuillez saisir le prénom du collègue que vous souhaitez ajouter : ', (prenomSaisi) => {
-                    collegue.prenom = prenomSaisi;
                     rl.question('Veuillez saisir l\'email du collègue que vous souhaitez ajouter : ', (emailSaisi) => {
-                        collegue.email = emailSaisi;
-                        rl.question('Veuillez saisir la date de naissance du collègue que vous souhaitez ajouter : ', (dateDeNaissanceSaisie) => {
-                            collegue.dateDeNaissance = dateDeNaissanceSaisie;
+                        rl.question('Veuillez saisir la date de naissance du collègue que vous souhaitez ajouter : ', (dateDeNaissanceSaisie) => {  
                             rl.question('Veuillez saisir l\'url de la photo du collègue que vous souhaitez ajouter : ', (urlPhotoSaisie) => {
-                                collegue.photoUrl = urlPhotoSaisie;
+                                let collegue = new Collegue(nomSaisi, prenomSaisi, emailSaisi, dateDeNaissanceSaisie, urlPhotoSaisie);
                                 service.creerCollegue(collegue)
                                 .then((collegue) => {
                                     lg(collegue);

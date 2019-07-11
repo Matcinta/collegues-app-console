@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var lg = console.log;
 var service = __importStar(require("../service/service"));
+var domains_1 = require("../domains");
 // récupération du module `readline`
 var readline_1 = __importDefault(require("readline"));
 // création d'un objet `rl` permettant de récupérer la saisie utilisateur
@@ -46,18 +47,13 @@ function start() {
             });
         }
         if (saisie === '2') {
-            var collegue_1 = {};
             rl.question('Veuillez saisir le nom du collègue que vous souhaitez ajouter : ', function (nomSaisi) {
-                collegue_1.nom = nomSaisi;
                 rl.question('Veuillez saisir le prénom du collègue que vous souhaitez ajouter : ', function (prenomSaisi) {
-                    collegue_1.prenom = prenomSaisi;
                     rl.question('Veuillez saisir l\'email du collègue que vous souhaitez ajouter : ', function (emailSaisi) {
-                        collegue_1.email = emailSaisi;
                         rl.question('Veuillez saisir la date de naissance du collègue que vous souhaitez ajouter : ', function (dateDeNaissanceSaisie) {
-                            collegue_1.dateDeNaissance = dateDeNaissanceSaisie;
                             rl.question('Veuillez saisir l\'url de la photo du collègue que vous souhaitez ajouter : ', function (urlPhotoSaisie) {
-                                collegue_1.photoUrl = urlPhotoSaisie;
-                                service.creerCollegue(collegue_1)
+                                var collegue = new domains_1.Collegue(nomSaisi, prenomSaisi, emailSaisi, dateDeNaissanceSaisie, urlPhotoSaisie);
+                                service.creerCollegue(collegue)
                                     .then(function (collegue) {
                                     lg(collegue);
                                     start();
@@ -71,11 +67,11 @@ function start() {
             });
         }
         if (saisie === '3') {
-            var collegue_2 = {};
+            var collegue_1 = {};
             rl.question('Veuillez saisir le matricule du collègue dont vous souhaitez modifier l\'email :', function (matriculeSaisi) {
                 rl.question('Veuillez saisir un nouvel email : ', function (emailSaisi) {
-                    collegue_2.email = emailSaisi;
-                    service.modifierEmail(matriculeSaisi, collegue_2)
+                    collegue_1.email = emailSaisi;
+                    service.modifierEmail(matriculeSaisi, collegue_1)
                         .then(function (collegue) {
                         lg(collegue);
                         start();
@@ -87,11 +83,11 @@ function start() {
             });
         }
         if (saisie === '4') {
-            var collegue_3 = {};
+            var collegue_2 = {};
             rl.question('Veuillez saisir le matricule du collègue dont vous souhaitez modifier l\'url de sa photo :', function (matriculeSaisi) {
                 rl.question('Veuillez saisir un nouvel adresse url pour la photo : ', function (photoUrlSaisi) {
-                    collegue_3.photoUrl = photoUrlSaisi;
-                    service.modifierPhoto(matriculeSaisi, collegue_3)
+                    collegue_2.photoUrl = photoUrlSaisi;
+                    service.modifierPhoto(matriculeSaisi, collegue_2)
                         .then(function (collegue) {
                         lg(collegue);
                         start();
