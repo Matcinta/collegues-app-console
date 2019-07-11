@@ -1,49 +1,32 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 // importation de la librairie request
 // recherche par défaut dans le répertoire node_modules
-const request = require('request');
-
-
-function rechercherColleguesParNom(nomRecherche, callback) {
-    request(`https://munier-collegues-api.herokuapp.com/collegue?nom=${nomRecherche.trim()}`, { json: true }, (err, res, body) => {
-        let tableauColleguesTrouves = body;
-        callback(tableauColleguesTrouves);
-
+var request_promise_native_1 = __importDefault(require("request-promise-native"));
+var lg = console.log;
+exports.rechercherColleguesParNom = function (nomRecherche) {
+    return request_promise_native_1.default("https://munier-collegues-api.herokuapp.com/collegue?nom=" + nomRecherche, { json: true })
+        .then(function (tabMats) {
+        return Promise.all(tabMats.map(function (matricule) {
+            return exports.rechercherColleguesParMatricule(matricule);
+        }));
     });
-
+};
+exports.rechercherColleguesParMatricule = function (matricule) {
+    return request_promise_native_1.default("https://munier-collegues-api.herokuapp.com/collegue/" + matricule, { json: true });
+};
+function creerCollegue(collegue) {
+    return request_promise_native_1.default("https://munier-collegues-api.herokuapp.com/collegue", { json: true, method: "POST", body: collegue });
 }
-
-function rechercherColleguesParMatricule(matricule, callback) {
-    request(`https://munier-collegues-api.herokuapp.com/collegue/${matricule}`, { json: true }, (err, res, body) => {
-        let collegue = body;
-        callback(collegue);
-    });
-
-}
-
-function creerCollegue(collegue, callback){
-    request(`https://munier-collegues-api.herokuapp.com/collegue`, { json: true, method: "POST", body: collegue}, (err, res, body) => {
-    let collegue = body;
-    callback(collegue);
-
-});
-}
-
-function modifierEmail(matricule, collegue, callback){
-    request(`https://munier-collegues-api.herokuapp.com/collegue/${matricule}`, { json: true, method: "PATCH", body: collegue}, (err, res, body) => {
-        let collegue = body;
-        callback(collegue);
-});
-}
-
-function modifierPhoto(matricule, collegue, callback){
-    request(`https://munier-collegues-api.herokuapp.com/collegue/${matricule}`, { json: true, method: "PATCH", body: collegue}, (err, res, body) => {
-        let collegue = body;
-        callback(collegue);
-});
-}
-
-exports.rechercherColleguesParNom = rechercherColleguesParNom;
-exports.rechercherColleguesParMatricule = rechercherColleguesParMatricule;
 exports.creerCollegue = creerCollegue;
+function modifierEmail(matricule, collegue) {
+    return request_promise_native_1.default("https://munier-collegues-api.herokuapp.com/collegue/" + matricule, { json: true, method: "PATCH", body: collegue });
+}
 exports.modifierEmail = modifierEmail;
+function modifierPhoto(matricule, collegue) {
+    return request_promise_native_1.default("https://munier-collegues-api.herokuapp.com/collegue/" + matricule, { json: true, method: "PATCH", body: collegue });
+}
 exports.modifierPhoto = modifierPhoto;

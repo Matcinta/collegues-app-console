@@ -1,110 +1,112 @@
-
-const service = require('../service/service');
-
+"use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var lg = console.log;
+var service = __importStar(require("../service/service"));
 // récupération du module `readline`
-const readline = require('readline');
+var readline_1 = __importDefault(require("readline"));
 // création d'un objet `rl` permettant de récupérer la saisie utilisateur
-const rl = readline.createInterface({
+var rl = readline_1.default.createInterface({
     input: process.stdin,
     output: process.stdout
 });
-
 function start() {
-    const menu1 = '1. Rechercher un collègue par nom';
-    const menu2 = '2. Créer un collègue';
-    const menu3 = '3. Modifier l\'email';
-    const menu4 = '4. Modifier la photo';
-    const menu99 = '99. Sortir';
-    console.log(`\n ${menu1} \n ${menu2} \n ${menu3} \n ${menu4} \n ${menu99}\n`);
-
+    var menu1 = '1. Rechercher un collègue par nom';
+    var menu2 = '2. Créer un collègue';
+    var menu3 = '3. Modifier l\'email';
+    var menu4 = '4. Modifier la photo';
+    var menu99 = '99. Sortir';
+    console.log("\n " + menu1 + " \n " + menu2 + " \n " + menu3 + " \n " + menu4 + " \n " + menu99 + "\n");
     // récupération de la saisie utilisateur
-    rl.question('Que souhaitez-vous faire ? : ', (saisie) => {
+    rl.question('Que souhaitez-vous faire ? : ', function (saisie) {
         // TODO: ajouter la condition où l'utilisateur tape autre chose que 1 et 99
-
         if (saisie === '1') {
-            rl.question('Veuillez saisir le nom du collègue que vous souhaitez chercher : ', (saisie2) => {
-
+            rl.question('Veuillez saisir le nom du collègue que vous souhaitez chercher : ', function (saisie2) {
                 // la variable `saisie` contient la saisie effectuée
-                console.log(`Vous avez saisi : ${saisie2}`);
-
-                console.log(`>> Recherche en cours du nom : ${saisie2} <<`);
-
-                service.rechercherColleguesParNom(`${saisie2}`, (colleguesTrouves) => {
-                    for (i = 0; i < colleguesTrouves.length; i++) {
-                        service.rechercherColleguesParMatricule(colleguesTrouves, (collegue) => {
-                            console.log(`${collegue.nom}  ${collegue.prenom} ${collegue.dateDeNaissance}`)
-                            start();
-                        });
-                    }
+                lg("Vous avez saisi : " + saisie2);
+                lg(">> Recherche en cours du nom : " + saisie2 + " <<");
+                service.rechercherColleguesParNom("" + saisie2)
+                    .then(function (colleguesTrouves) {
+                    colleguesTrouves.forEach(function (collegue) {
+                        lg(collegue.nom + "  " + collegue.prenom + " " + collegue.dateDeNaissance);
+                        start();
+                    });
+                }).catch(function (err) {
+                    lg(err);
                 });
             });
         }
         if (saisie === '2') {
-            let collegue = {};
-            rl.question('Veuillez saisir le nom du collègue que vous souhaitez ajouter : ', (nomSaisi) => {
-                collegue.nom = nomSaisi;
-                rl.question('Veuillez saisir le prénom du collègue que vous souhaitez ajouter : ', (prenomSaisi) => {
-                    collegue.prenom = prenomSaisi;
-                    rl.question('Veuillez saisir l\'email du collègue que vous souhaitez ajouter : ', (emailSaisi) => {
-                        collegue.email = emailSaisi;
-                        rl.question('Veuillez saisir la date de naissance du collègue que vous souhaitez ajouter : ', (dateDeNaissanceSaisie) => {
-                            collegue.dateDeNaissance = dateDeNaissanceSaisie;
-                            rl.question('Veuillez saisir l\'url de la photo du collègue que vous souhaitez ajouter : ', (urlPhotoSaisie) => {
-                                collegue.photoUrl = urlPhotoSaisie;
-                                service.creerCollegue(collegue, (collegue) => {
-                                    console.log(collegue);
+            var collegue_1 = {};
+            rl.question('Veuillez saisir le nom du collègue que vous souhaitez ajouter : ', function (nomSaisi) {
+                collegue_1.nom = nomSaisi;
+                rl.question('Veuillez saisir le prénom du collègue que vous souhaitez ajouter : ', function (prenomSaisi) {
+                    collegue_1.prenom = prenomSaisi;
+                    rl.question('Veuillez saisir l\'email du collègue que vous souhaitez ajouter : ', function (emailSaisi) {
+                        collegue_1.email = emailSaisi;
+                        rl.question('Veuillez saisir la date de naissance du collègue que vous souhaitez ajouter : ', function (dateDeNaissanceSaisie) {
+                            collegue_1.dateDeNaissance = dateDeNaissanceSaisie;
+                            rl.question('Veuillez saisir l\'url de la photo du collègue que vous souhaitez ajouter : ', function (urlPhotoSaisie) {
+                                collegue_1.photoUrl = urlPhotoSaisie;
+                                service.creerCollegue(collegue_1)
+                                    .then(function (collegue) {
+                                    lg(collegue);
                                     start();
-                                })
-                            })
-                        })
-                    })
+                                }).catch(function (err) {
+                                    lg(err);
+                                });
+                            });
+                        });
+                    });
                 });
             });
         }
-
-
         if (saisie === '3') {
-            rl.question('Veuillez saisir le matricule du collègue dont vous souhaitez modifier l\'email :', (matriculeSaisi) => {
-                service.rechercherColleguesParMatricule(matriculeSaisi, (collegue) => {
-                    rl.question('Veuillez saisir un nouvel email : ', (emailSaisi) => {
-                        collegue.email = emailSaisi;
-                    service.modifierEmail(matriculeSaisi, collegue, (collegue) => {
-                        console.log(collegue);
+            var collegue_2 = {};
+            rl.question('Veuillez saisir le matricule du collègue dont vous souhaitez modifier l\'email :', function (matriculeSaisi) {
+                rl.question('Veuillez saisir un nouvel email : ', function (emailSaisi) {
+                    collegue_2.email = emailSaisi;
+                    service.modifierEmail(matriculeSaisi, collegue_2)
+                        .then(function (collegue) {
+                        lg(collegue);
                         start();
+                    })
+                        .catch(function (err) {
+                        lg(err);
                     });
-                   
                 });
-
             });
-        });
-    }
+        }
         if (saisie === '4') {
+            var collegue_3 = {};
             rl.question('Veuillez saisir le matricule du collègue dont vous souhaitez modifier l\'url de sa photo :', function (matriculeSaisi) {
-                service.rechercherColleguesParMatricule(matriculeSaisi, (collegue) => {
-                    rl.question('Veuillez saisir un nouvel adresse url pour la photo : ', (photoUrlSaisi) => {
-                        collegue.photoUrl = photoUrlSaisi;
-                    service.modifierPhoto(matriculeSaisi, collegue, (collegue) => {
-                        console.log(collegue);
+                rl.question('Veuillez saisir un nouvel adresse url pour la photo : ', function (photoUrlSaisi) {
+                    collegue_3.photoUrl = photoUrlSaisi;
+                    service.modifierPhoto(matriculeSaisi, collegue_3)
+                        .then(function (collegue) {
+                        lg(collegue);
                         start();
+                    })
+                        .catch(function (err) {
+                        lg(err);
                     });
-                   
                 });
-
             });
-        });
         }
         else if (saisie === '99') {
             console.log('Au revoir');
             rl.close();
         }
-
-
         // attention, une fois l'interface fermée, la saisie n'est plus possible
     });
-
 }
-
-
-
 exports.start = start;
-
